@@ -34,16 +34,17 @@ router.get('/products/:id', requireToken, (req, res, next) => {
       .catch(next)
   })
   
-
+// index 
 // show all products created  
-router.get('/products/all',(req, res,next) => {
+router.get('/productsAll',(req, res,next) => {
     Product.find()
-         .sort({date: -1})
         .then(products => {
             res.status(200).json({products:products})
         })
         .catch(next)
 });
+
+
 // post request
 router.post('/products',requireToken , (req, res,next) => {
     const user = req.user.id
