@@ -23,6 +23,19 @@ router.get('/products',requireToken,(req, res,next) => {
         .catch(next)
 });
 
+// The RegExp constructor creates a regular expression object for matching text with a pattern.
+router.get('/products/search',(req, res,next) => {
+    const name = req.query.name
+    Product.find({'name': new RegExp(name, "i")})
+         .sort({date: -1})
+        .then(products => {
+            console.log(products)
+            res.status
+            (200).json({products:products})
+        })
+        .catch(next)
+});
+
 router.get('/products/:id', requireToken, (req, res, next) => {
     Product.findById(req.params.id)
       .then(handle404)

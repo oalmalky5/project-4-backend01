@@ -14,8 +14,21 @@ const userSchema = new mongoose.Schema({
     type: String, 
     required: true
   },
+
+  admin: {
+    type: Boolean,
+    required: true,
+    default: false
+  }
+  // cart:{
+  //   type: mongoose.Schema.Types.ObjectId,
+  //   ref: "Cart",
+  // },
+
+
+
   // should have a regular client and an admin
-  token: String
+  // token: String
   
 }, {
   timestamps: true,

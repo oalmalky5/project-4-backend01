@@ -16,6 +16,7 @@ const BadParamsError = errors.BadParamsError
 const BadCredentialsError = errors.BadCredentialsError
 
 const User = require('../models/user')
+const Cart =require('../models/cart')
 
 // passing this as a second argument to `router.<verb>` will make it
 // so that a token MUST be passed for that route to be available
@@ -43,16 +44,33 @@ router.post('/sign-up', (req, res, next) => {
     .then(() => bcrypt.hash(req.body.credentials.password, bcryptSaltRounds))
     .then(hash => {
       // return necessary params to create a user
+      
       return {
         email: req.body.credentials.email,
-        hashedPassword: hash
+        hashedPassword: hash,
+
       }
     })
     // create user with provided email and hashed password
     .then(user => User.create(user))
     // send the new user object back with status 201, but `hashedPassword`
     // won't be send because of the `transform` in the User model
-    .then(user => res.status(201).json({ user: user.toObject() }))
+    .then(user => {
+      Cart.create({
+        owner: user._id
+      })
+        .then(
+          cart => User.update({_id: user._id}, {$set: {cart: cart._id}})
+          .then(
+            res.status(201).json({ user: user.toObject() })
+          )
+          .catch(next)
+          
+        )
+        .catch(next)
+    }
+      
+      )
     // pass any errors along to the error handler
     .catch(next)
 })
