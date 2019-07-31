@@ -19,7 +19,8 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     required: true,
     default: false
-  }
+  },
+  products:[{type:mongoose.Schema.Types.ObjectId,ref:'Product'}],
   // cart:{
   //   type: mongoose.Schema.Types.ObjectId,
   //   ref: "Cart",
@@ -28,7 +29,7 @@ const userSchema = new mongoose.Schema({
 
 
   // should have a regular client and an admin
-  // token: String
+  token: String
   
 }, {
   timestamps: true,

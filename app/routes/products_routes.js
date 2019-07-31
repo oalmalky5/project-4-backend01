@@ -62,6 +62,7 @@ router.get('/productsAll',(req, res,next) => {
 router.post('/products',requireToken , (req, res,next) => {
     const user = req.user.id
     const product = req.body.product
+    console.log(product)
     product.owner = user
 
     Product.create(product)
@@ -98,15 +99,14 @@ router.put('/products/:id', requireToken,(req,res,next) => {
     .catch(next)
 })
 
-router.delete('/products/:id', requireToken, (req, res, next) => {
+router.delete('/products/:id', (req, res, next) => {
     const productId = req.params.id
     Product.findById(productId)
         .then(handle404)
         .then(product => {
             // requiredOwnership(req, product)
-            product.remove(productId)
+            product.remove()
         })
-
         .then(() => res.sendStatus(204))
         .catch(next)
 })
